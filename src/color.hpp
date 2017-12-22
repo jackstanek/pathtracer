@@ -47,7 +47,7 @@ private:
 
     inline void clamp_channels() {
         for (int i = 0; i < CC_N; i++) {
-            channels[CC_N] = clamp(channels[CC_N]);
+            channels[i] = clamp(channels[i]);
         }
     }
 };
