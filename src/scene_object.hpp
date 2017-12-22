@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "color.hpp"
+#include "geometry.hpp"
 #include "light.hpp"
 #include "material.hpp"
 #include "scene_object.hpp"
@@ -12,7 +13,7 @@
 
 struct Intersection;
 
-class SceneObject {
+class SceneObject : public Geometry {
 public:
     SceneObject(const Vector3D& pos, const Material& mat);
     virtual ~SceneObject();
@@ -23,7 +24,6 @@ public:
     virtual Material GetMaterial() const;
 
 protected:
-    Vector3D pos;
     Material mat;
 };
 

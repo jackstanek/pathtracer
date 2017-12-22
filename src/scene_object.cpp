@@ -25,7 +25,7 @@ Intersection::Intersection(const SceneObject* obj,
 }
 
 SceneObject::SceneObject(const Vector3D& pos, const Material& mat) :
-    pos(pos),
+    Geometry(pos),
     mat(mat)
 {
 }
