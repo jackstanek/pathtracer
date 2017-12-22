@@ -1,0 +1,6 @@
+*.png
+*.bmp
+*.jpg
+*.tga
+*.o
+build/*
