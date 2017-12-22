@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 
+#include "ray.hpp"
 #include "scene_parser.hpp"
 #include "vector.hpp"
 

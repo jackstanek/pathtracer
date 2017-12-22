@@ -7,6 +7,7 @@
 #include <stdint.h>
 
 #include "camera.hpp"
+#include "intersection.hpp"
 #include "scene.hpp"
 #include "scene_object.hpp"
 

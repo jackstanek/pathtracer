@@ -1,6 +1,7 @@
 #include <cmath>
 
 #include "camera.hpp"
+#include "ray.hpp"
 
 Camera::Camera(double ha, uint32_t width, uint32_t height,
                const Vector3D& pos, const Vector3D& dir, const Vector3D& up) :

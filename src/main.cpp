@@ -8,9 +8,12 @@
 #include "color.hpp"
 #include "helper.hpp"
 #include "material.hpp"
+#include "normal_triangle.hpp"
 #include "scene.hpp"
 #include "scene_object.hpp"
 #include "scene_parser.hpp"
+#include "sphere.hpp"
+#include "triangle.hpp"
 #include "vector.hpp"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
@@ -114,7 +117,9 @@ int main(int argc, char* argv[])
             mat_pool.push_back(Material(sc));
             break;
         case CK_SPHERE:
-            scene.AddObject(SceneObject::MakeFromComponent(sc, mat_pool));
+            scene.AddObject(new Sphere(Vector3D(v[0].d_val, v[1].d_val, v[2].d_val),
+                                       v[3].d_val,
+                                       mat_pool.back()));
             break;
         case CK_POINT_LIGHT:
         case CK_SPOT_LIGHT:
@@ -122,11 +127,11 @@ int main(int argc, char* argv[])
             scene.AddLight(LightSource::MakeFromComponent(sc));
             break;
         case CK_MAX_VERTS:
-            max_verts = sc->values()[0].i_val;
+            max_verts = v[0].i_val;
             assert(max_verts > 0);
             break;
         case CK_MAX_NORMALS:
-            max_norms = sc->values()[0].i_val;
+            max_norms = v[0].i_val;
             assert(max_norms > 0);
             break;
         case CK_VERTEX:
