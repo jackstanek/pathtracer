@@ -57,7 +57,7 @@ Color Scene::ObjectColorAtPoint(const Ray3D& view,
            their own class hierarchy */
         Vector3D obj_to_light = light->GetVecFromPoint(pt);
         Color diffuse = mat.diffuse
-             * std::max(0.0, obj_to_light.Normalized().Dot(normal))
+            * std::max(0.0, obj_to_light.Normalized().Dot(normal))
             * light->GetIntensity(pt);
 
         /* Phong specular shading */
