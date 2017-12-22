@@ -19,8 +19,8 @@ public:
     Scene(uint32_t w = 640, uint32_t h = 480);
     ~Scene();
 
-    void AddObject(SceneObject* obj);
-    void AddLight(LightSource* light);
+    void AddObject(const SceneObject* obj);
+    void AddLight(const LightSource* light);
 
     uint32_t GetHeight() const;
     uint32_t GetWidth() const;
@@ -50,8 +50,8 @@ private:
     /* Distance from point to the image plane */
     double dist;
 
-    std::vector<SceneObject*> objects;
-    std::vector<LightSource*> lights;
+    std::vector<const SceneObject*> objects;
+    std::vector<const LightSource*> lights;
 };
 
 #endif

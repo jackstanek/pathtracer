@@ -33,12 +33,12 @@ Scene::~Scene()
     }
 }
 
-void Scene::AddObject(SceneObject* obj)
+void Scene::AddObject(const SceneObject* obj)
 {
     this->objects.push_back(obj);
 }
 
-void Scene::AddLight(LightSource* light)
+void Scene::AddLight(const LightSource* light)
 {
     this->lights.push_back(light);
 }
