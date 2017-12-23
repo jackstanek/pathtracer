@@ -5,34 +5,38 @@
 #include "vector.hpp"
 
 Vector3D::Vector3D(double x, double y, double z) :
-    x(x),
-    y(y),
-    z(z),
+    vals {x, y, z},
     norm(this->Norm())
-{}
+{
+}
 
 Vector3D::Vector3D(const SceneComponent* sc, int start_val)
 {
     auto v = sc->values();
 
-    this->x = v[start_val].d_val;
-    this->y = v[start_val + 1].d_val;
-    this->z = v[start_val + 2].d_val;
+    for (int axis = AXIS_X; axis < N_AXES; axis++) {
+        vals[axis] = v[start_val + axis].d_val;
+    }
+}
+
+double Vector3D::GetValue(int axis) const
+{
+    return this->vals[axis];
 }
 
 double Vector3D::GetX() const
 {
-    return this->x;
+    return this->GetValue(AXIS_X);
 }
 
 double Vector3D::GetY() const
 {
-    return this->y;
+    return this->GetValue(AXIS_Y);
 }
 
 double Vector3D::GetZ() const
 {
-    return this->z;
+    return this->GetValue(AXIS_Z);
 }
 
 Vector3D Vector3D::To(const Vector3D &v) const
@@ -42,7 +46,9 @@ Vector3D Vector3D::To(const Vector3D &v) const
 
 double Vector3D::Norm() const
 {
-    return std::sqrt(x * x + y * y + z * z);
+    return std::sqrt(vals[AXIS_X] * vals[AXIS_X] +
+                     vals[AXIS_Y] * vals[AXIS_Y] +
+                     vals[AXIS_Z] * vals[AXIS_Z]);
 }
 
 Vector3D Vector3D::Normalized() const
@@ -56,16 +62,19 @@ Vector3D Vector3D::Normalized() const
 
 double Vector3D::Dot(const Vector3D& v) const
 {
-    return this->x * v.x +
-        this->y * v.y +
-        this->z * v.z;
+    /* I used getters here to improve readability, don't roast me for
+       using getters within the class */
+    return GetX() * v.GetX() +
+        GetY() * v.GetY() +
+        GetZ() * v.GetZ();
 }
 
 Vector3D Vector3D::Cross(const Vector3D& v) const
 {
-    return Vector3D(this->y * v.z - this->z * v.y,
-                    this->z * v.x - this->x * v.z,
-                    this->x * v.y - this->y * v.x);
+    /* Same deal here lol */
+    return Vector3D(GetY() * v.GetZ() - GetZ() * v.GetY(),
+                    GetZ() * v.GetX() - GetX() * v.GetZ(),
+                    GetX() * v.GetY() - GetY() * v.GetX());
 }
 
 Vector3D Vector3D::Projection(const Vector3D &v) const
@@ -96,43 +105,44 @@ Vector3D Vector3D::RefractThrough(const Vector3D& n, double ior) const
 
 Vector3D Vector3D::operator+ (const Vector3D& v) const
 {
-    return Vector3D(this->x + v.x,
-                    this->y + v.y,
-                    this->z + v.z);
+    /* Getters used within the class for readability, sorry */
+    return Vector3D(GetX() + v.GetX(),
+                    GetY() + v.GetY(),
+                    GetZ() + v.GetZ());
 }
 
 void Vector3D::operator+= (const Vector3D& v)
 {
-    this->x += v.x;
-    this->y += v.y;
-    this->z += v.z;
+    this->vals[AXIS_X] += v.GetX();
+    this->vals[AXIS_Y] += v.GetY();
+    this->vals[AXIS_Z] += v.GetZ();
 }
 
 Vector3D Vector3D::operator- (const Vector3D& v) const
 {
-    return Vector3D(this->x - v.x,
-                    this->y - v.y,
-                    this->z - v.z);
+    return Vector3D(GetX() - v.GetX(),
+                    GetY() - v.GetY(),
+                    GetZ() - v.GetZ());
 }
 
 Vector3D Vector3D::operator- () const
 {
-    return Vector3D(-this->x,
-                    -this->y,
-                    -this->z);
+    return Vector3D(-GetX(),
+                    -GetY(),
+                    -GetZ());
 }
 
 Vector3D Vector3D::operator* (double c) const
 {
-    return Vector3D(this->x * c,
-                    this->y * c,
-                    this->z * c);
+    return Vector3D(GetX() * c,
+                    GetY() * c,
+                    GetZ() * c);
 }
 
 Vector3D Vector3D::operator/ (double c) const
 {
     assert(c != 0.0);
-    return Vector3D(this->x / c,
-                    this->y / c,
-                    this->z / c);
+    return Vector3D(GetX() / c,
+                    GetY() / c,
+                    GetZ() / c);
 }

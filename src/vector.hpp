@@ -6,6 +6,13 @@
 
 #include "scene_parser.hpp"
 
+enum Axis {
+    AXIS_X = 0,
+    AXIS_Y,
+    AXIS_Z,
+    N_AXES
+};
+
 class Vector3D {
 public:
     Vector3D(double x = 0.0, double y = 0.0, double z = 0.0);
@@ -14,6 +21,7 @@ public:
     double GetX() const;
     double GetY() const;
     double GetZ() const;
+    double GetValue(int axis) const;
 
     /* Vector from this to v */
     Vector3D To(const Vector3D& v) const;
@@ -50,7 +58,7 @@ public:
     Vector3D operator/ (double c) const;
 
 private:
-    double x, y, z;
+    double vals[N_AXES];
     double norm;
 };
 
