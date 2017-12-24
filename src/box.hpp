@@ -29,7 +29,10 @@ public:
     /* Construct a bounding box around two boxes */
     Box(const Box& left, const Box& right);
 
-    virtual Intersection Intersects(const Ray3D& ray, double max_dist = INFINITY) const;
+    virtual ~Box();
+
+    virtual Intersection Intersects(const Ray3D& ray,
+                                    double max_dist = INFINITY) const;
 
     bool ValidBoundingBox() const;
 

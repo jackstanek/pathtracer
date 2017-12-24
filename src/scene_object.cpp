@@ -24,3 +24,8 @@ Material SceneObject::GetMaterial() const
 {
     return this->mat;
 }
+
+const Box* SceneObject::GetBoundingBox() const
+{
+    return &this->bounding_box;
+}

@@ -13,6 +13,10 @@ Box::Box(const Vector3D& min_extent,
 {
 }
 
+Box::~Box()
+{
+}
+
 Intersection Box::Intersects(const Ray3D& ray, double max_dist) const
 {
     Vector3D origin = ray.GetOrigin(), inv_dir = ray.GetInvDir();
