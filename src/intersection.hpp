@@ -3,9 +3,8 @@
 
 #include "geometry.hpp"
 #include "ray.hpp"
+#include "scene_object.hpp"
 #include "vector.hpp"
-
-class SceneObject;
 
 enum Incidence {
     INC_INWARD,
@@ -30,12 +29,18 @@ struct SceneObjectIntersection : public Intersection {
                             int dir = 0,
                             const Vector3D& point = Vector3D(),
                             const Vector3D& norm = Vector3D(1, 0, 0));
+
     int inc;
     Vector3D point;
     Ray3D norm;
 
     inline bool operator> (const SceneObjectIntersection& i) const {
         return this->dist > i.dist;
+    }
+
+    /* Helper cast function */
+    inline const SceneObject* GetObject() const {
+        return static_cast<const SceneObject*>(obj);
     }
 };
 

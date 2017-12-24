@@ -8,11 +8,11 @@
 #include "geometry.hpp"
 #include "light.hpp"
 #include "material.hpp"
-#include "scene_object.hpp"
 #include "ray.hpp"
 #include "vector.hpp"
 
 struct Intersection;
+struct SceneObjectIntersection;
 
 class SceneObject : public Geometry {
 public:

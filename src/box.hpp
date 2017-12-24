@@ -4,9 +4,10 @@
 #include <cmath>
 
 #include "geometry.hpp"
-#include "intersection.hpp"
 #include "ray.hpp"
 #include "vector.hpp"
+
+struct Intersection;
 
 enum BoxExtent {
     BE_MIN_EXTENT = 0,
