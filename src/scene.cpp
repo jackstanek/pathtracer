@@ -103,7 +103,7 @@ Color Scene::SceneColorAlongRay(const Ray3D& ray, uint8_t depth) const
     //Intersection closest;
 
     for (auto obj : this->objects) {
-        Intersection info = obj->Intersects(ray);
+        SceneObjectIntersection info = obj->Intersects(ray);
 
         if (info.intersected) {
             zb.push(info);
@@ -112,18 +112,19 @@ Color Scene::SceneColorAlongRay(const Ray3D& ray, uint8_t depth) const
 
     /* >= 1 object intersected */
     if (zb.size() > 0) {
-        Intersection closest = zb.top();
+        SceneObjectIntersection closest = zb.top();
 
+        auto scn_obj = static_cast<const SceneObject*>(closest.obj);
         if (closest.inc == INC_INWARD) {
             return this->ObjectColorAtPoint(ray,
-                                            closest.obj,
+                                            scn_obj,
                                             closest.point,
                                             closest.norm.GetDir(),
                                             depth);
         } else if (closest.inc == INC_OUTWARD) {
             return this->SceneColorAlongRay(ray.RefractThrough(closest.point,
                                                                -closest.norm.GetDir(),
-                                                               closest.obj->GetMaterial().ior),
+                                                               scn_obj->GetMaterial().ior),
                                             depth + 1);
         }
     }

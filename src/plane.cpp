@@ -14,25 +14,30 @@ Plane::~Plane()
 {
 }
 
-Intersection Plane::Intersects(const Ray3D &ray, double max_dist) const
+SceneObjectIntersection Plane::Intersects(const Ray3D &ray, double max_dist) const
 {
     double denom = ray.GetDir().Dot(this->normal);
 
     /* Infinite / zero intersections if ray perpendicular to normal */
     if (is_zero(denom)) {
-        return Intersection(this, false, ray);
+        return SceneObjectIntersection(this, false, ray);
     } else {
         double t = (this->pos - ray.GetOrigin()).Dot(this->normal) / denom;
 
         if (t >= EPSILON && t <= max_dist) {
-            return Intersection(this,
-                                true,
-                                ray,
-                                INC_INWARD,
-                                ray.Point(t),
-                                this->normal);
+            return SceneObjectIntersection(this,
+                                           true,
+                                           ray,
+                                           INC_INWARD,
+                                           ray.Point(t),
+                                           this->normal);
         } else {
-            return Intersection(this, false, ray);
+            return SceneObjectIntersection(this, false, ray);
         }
     }
+}
+
+Vector3D Plane::NormalAtPoint(const Vector3D &v) const
+{
+    return this->normal;
 }

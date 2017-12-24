@@ -5,19 +5,22 @@ Sphere::Sphere(const Vector3D& pos, double radius, const Material& mat) :
     SceneObject(pos, mat),
     radius(radius)
 {
+    double box_extent = radius * M_SQRT2;
+    Vector3D extent(box_extent, box_extent, box_extent);
+    this->bounding_box = Box(-box_extent, box_extent);
 }
 
 Sphere::~Sphere()
 {
 }
 
-Intersection Sphere::Intersects(const Ray3D& ray, double max_dist) const
+SceneObjectIntersection Sphere::Intersects(const Ray3D& ray, double max_dist) const
 {
     Vector3D to_ray_origin = ray.GetOrigin() - this->pos;
 
     /* object must be "in front of" the ray */
     if (ray.GetDir().Dot(-to_ray_origin) <= 0) {
-        return Intersection(this, false, ray);
+        return SceneObjectIntersection(this, false, ray);
     }
 
     /* determinant */
@@ -28,7 +31,7 @@ Intersection Sphere::Intersects(const Ray3D& ray, double max_dist) const
 
     if (det < 0) {
         /* No intersection with sphere */
-        return Intersection(this, false, ray);
+        return SceneObjectIntersection(this, false, ray);
     } else {
         /* Either one or two intersections; return closer one to camera */
         double s = sqrt(det);
@@ -45,14 +48,16 @@ Intersection Sphere::Intersects(const Ray3D& ray, double max_dist) const
                 INC_INWARD :
                 INC_OUTWARD; // Incidence
 
-            return Intersection(this,
-                                true,
-                                ray,
-                                inc,
-                                int_pt,
-                                this->NormalAtPoint(int_pt));
+            return SceneObjectIntersection(this,
+                                           true,
+                                           ray,
+                                           inc,
+                                           int_pt,
+                                           this->NormalAtPoint(int_pt));
         } else {
-            return Intersection(this, false, ray);
+            return SceneObjectIntersection(this, false, ray);
         }
     }
+
+    //return this->bounding_box.Intersects(ray, max_dist);
 }

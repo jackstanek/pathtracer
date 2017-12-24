@@ -11,7 +11,7 @@ public:
              const Material& mat);
     virtual ~Triangle();
 
-    virtual Intersection Intersects(const Ray3D& ray, double max_dist) const override;
+    virtual SceneObjectIntersection Intersects(const Ray3D& ray, double max_dist) const override;
 
 protected:
     Vector3D verts[3];

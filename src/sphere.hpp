@@ -9,7 +9,7 @@ public:
     Sphere(const Vector3D& pos, double radius, const Material& mat);
     virtual ~Sphere();
 
-    virtual Intersection Intersects(const Ray3D& ray, double max_dist) const override;
+    virtual SceneObjectIntersection Intersects(const Ray3D& ray, double max_dist) const override;
 
 private:
     double radius;

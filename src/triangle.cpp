@@ -19,10 +19,10 @@ Triangle::~Triangle()
 
 /* Möller-Trumbore algorithm implementation from
    https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/moller-trumbore-ray-triangle-intersection */
-Intersection Triangle::Intersects(const Ray3D &ray, double max_dist) const
+SceneObjectIntersection Triangle::Intersects(const Ray3D &ray, double max_dist) const
 {
     /* Initial test... are we even facing the triangle? */
-    Intersection plane_intersect = Plane::Intersects(ray, max_dist);
+    SceneObjectIntersection plane_intersect = Plane::Intersects(ray, max_dist);
     if (!plane_intersect.intersected) {
         return plane_intersect;
     }
@@ -40,13 +40,13 @@ Intersection Triangle::Intersects(const Ray3D &ray, double max_dist) const
         u = v0_to_origin.Dot(p) * inverse_det;
 
     if (u > 1 || u < 0) {
-        return Intersection(this, false, ray);
+        return SceneObjectIntersection(this, false, ray);
     }
 
     double v = ray.GetDir().Dot(v0_to_origin.Cross(v0v1)) * inverse_det;
 
     if (v < 0 || u + v > 1) {
-        return Intersection(this, false, ray);
+        return SceneObjectIntersection(this, false, ray);
     }
 
     /* We successfully intersected the triangle! Since we already

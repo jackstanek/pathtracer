@@ -10,7 +10,9 @@
 #include "color.hpp"
 #include "scene_object.hpp"
 
-typedef std::priority_queue<Intersection, std::vector<Intersection>, std::greater<Intersection> > ZBuffer;
+typedef std::priority_queue<SceneObjectIntersection,
+                            std::vector<SceneObjectIntersection>,
+                            std::greater<SceneObjectIntersection> > ZBuffer;
 
 typedef std::vector<Vector3D> VertexPool;
 

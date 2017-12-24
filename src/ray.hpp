@@ -9,9 +9,11 @@ public:
 
     Vector3D GetOrigin() const;
     Vector3D GetDir() const;
+    Vector3D GetInvDir() const;
 
-    /* Get a point on the ray at parameter t */
+    /* Get a point on the ray at parameter t, or at point on axis at pt */
     Vector3D Point(double t) const;
+    Vector3D Point(double pt, int axis) const;
 
     /* Project a point at vector v onto this ray and return the
        projected point */
@@ -24,6 +26,9 @@ public:
 private:
     Vector3D origin;
     Vector3D dir;
+
+    /* Reciprocal of the direction vector */
+    Vector3D inv_dir;
 };
 
 #endif

@@ -22,9 +22,9 @@ NormalTriangle::~NormalTriangle()
 {
 }
 
-Intersection NormalTriangle::Intersects(const Ray3D &ray, double max_dist) const
+SceneObjectIntersection NormalTriangle::Intersects(const Ray3D &ray, double max_dist) const
 {
-    Intersection intersected = Triangle::Intersects(ray, max_dist);
+    SceneObjectIntersection intersected = Triangle::Intersects(ray, max_dist);
     if (intersected.intersected) {
         intersected.norm = Ray3D(intersected.point,
                                  this->NormalAtPoint(intersected.point));

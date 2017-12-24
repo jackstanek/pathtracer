@@ -7,7 +7,8 @@
 
 Ray3D::Ray3D(const Vector3D& origin, const Vector3D& dir) :
     origin(origin),
-    dir(dir.Normalized())
+    dir(dir.Normalized()),
+    inv_dir(1 / this->dir)
 {}
 
 Vector3D Ray3D::Projection(const Vector3D &v) const
@@ -24,6 +25,12 @@ Vector3D Ray3D::GetOrigin() const
 Vector3D Ray3D::GetDir() const
 {
     return this->dir;
+}
+
+
+Vector3D Ray3D::GetInvDir() const
+{
+    return this->inv_dir;
 }
 
 Ray3D Ray3D::ReflectAbout(const Vector3D& pt, const Vector3D& n) const

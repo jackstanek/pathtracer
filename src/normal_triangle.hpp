@@ -15,7 +15,7 @@ public:
 
     virtual ~NormalTriangle();
 
-    virtual Intersection Intersects(const Ray3D& ray, double max_dist) const override;
+    virtual SceneObjectIntersection Intersects(const Ray3D& ray, double max_dist) const override;
     virtual Vector3D NormalAtPoint(const Vector3D& v) const override;
 
 protected:
