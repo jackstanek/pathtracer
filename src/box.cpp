@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cassert>
 
 #include "box.hpp"
 #include "geometry.hpp"
@@ -11,6 +12,21 @@ Box::Box(const Vector3D& min_extent,
     Geometry((min_extent + max_extent) / 2),
     extents {min_extent, max_extent}
 {
+    assert(min_extent < max_extent);
+}
+
+Box::Box(const Box& left, const Box& right) :
+    Geometry(((left.pos - left.extents[BE_MIN_EXTENT]) +
+              (right.pos + right.extents[BE_MAX_EXTENT])) / 2)
+{
+    auto left_min = left.extents[BE_MIN_EXTENT], right_min = right.extents[BE_MIN_EXTENT];
+    extents[BE_MIN_EXTENT] = Vector3D(std::min(left_min.GetX(), right_min.GetX()),
+                                      std::min(left_min.GetY(), right_min.GetY()),
+                                      std::min(left_min.GetZ(), right_min.GetZ()));
+    auto left_max = left.extents[BE_MAX_EXTENT], right_max = right.extents[BE_MAX_EXTENT];
+    extents[BE_MAX_EXTENT] = Vector3D(std::min(left_max.GetX(), right_max.GetX()),
+                                      std::min(left_max.GetY(), right_max.GetY()),
+                                      std::min(left_max.GetZ(), right_max.GetZ()));
 }
 
 Box::~Box()

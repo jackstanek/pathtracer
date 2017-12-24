@@ -53,3 +53,8 @@ SceneObjectIntersection Triangle::Intersects(const Ray3D &ray, double max_dist) 
        computed the intersection point and normal, return those. */
     return plane_intersect;
 }
+
+const Box* Triangle::GetBoundingBox() const
+{
+    return nullptr;
+}

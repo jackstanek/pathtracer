@@ -11,6 +11,8 @@ public:
 
     virtual SceneObjectIntersection Intersects(const Ray3D& ray, double max_dist) const override;
 
+    virtual const Box* GetBoundingBox() const override;
+
 private:
     double radius;
 

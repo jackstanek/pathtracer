@@ -153,3 +153,14 @@ Vector3D operator/ (double c, const Vector3D& v)
                     c / v.GetY(),
                     c / v.GetZ());
 }
+
+bool Vector3D::operator< (const Vector3D& v) const
+{
+    for (int axis = AXIS_X; axis < N_AXES; axis++) {
+        if (vals[axis] >= v.vals[axis]) {
+            return false;
+        }
+    }
+
+    return true;
+}

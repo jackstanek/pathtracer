@@ -1,14 +1,14 @@
 #ifndef _VECTOR_HPP
 #define _VECTOR_HPP
 
+#include <algorithm>
 #include <sstream>
-#include <string>
 
 #include "scene_parser.hpp"
 
 enum Axis {
     AXIS_X = 0,
-    AXIS_Y,
+ AXIS_Y,
     AXIS_Z,
     N_AXES
 };
@@ -56,6 +56,7 @@ public:
     Vector3D operator- () const;
     Vector3D operator* (double c) const;
     Vector3D operator/ (double c) const;
+    bool operator< (const Vector3D& v) const;
 
 private:
     double vals[N_AXES];

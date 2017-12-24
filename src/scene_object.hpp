@@ -25,14 +25,10 @@ public:
 
     virtual Material GetMaterial() const;
 
-    const Box* GetBoundingBox() const;
+    virtual const Box* GetBoundingBox() const = 0;
 
 protected:
     Material mat;
-
-    /* A container for this scene object's bounding box. Should be
-       initialized in subclasses. */
-    Box bounding_box;
 };
 
 #endif

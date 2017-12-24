@@ -11,8 +11,7 @@
 
 SceneObject::SceneObject(const Vector3D& pos, const Material& mat) :
     Geometry(pos),
-    mat(mat),
-    bounding_box(Vector3D(), Vector3D())
+    mat(mat)
 {
 }
 
@@ -23,9 +22,4 @@ SceneObject::~SceneObject()
 Material SceneObject::GetMaterial() const
 {
     return this->mat;
-}
-
-const Box* SceneObject::GetBoundingBox() const
-{
-    return &this->bounding_box;
 }

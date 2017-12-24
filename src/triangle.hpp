@@ -11,6 +11,8 @@ public:
              const Material& mat);
     virtual ~Triangle();
 
+    virtual const Box* GetBoundingBox() const override;
+
     virtual SceneObjectIntersection Intersects(const Ray3D& ray, double max_dist) const override;
 
 protected:

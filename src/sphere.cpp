@@ -5,9 +5,6 @@ Sphere::Sphere(const Vector3D& pos, double radius, const Material& mat) :
     SceneObject(pos, mat),
     radius(radius)
 {
-    double box_extent = radius * M_SQRT2;
-    Vector3D extent(box_extent, box_extent, box_extent);
-    this->bounding_box = Box(-box_extent, box_extent);
 }
 
 Sphere::~Sphere()
@@ -58,4 +55,11 @@ SceneObjectIntersection Sphere::Intersects(const Ray3D& ray, double max_dist) co
             return SceneObjectIntersection(this, false, ray);
         }
     }
+}
+
+const Box* Sphere::GetBoundingBox() const
+{
+    double box_extent = radius * M_SQRT2;
+    Vector3D extent(box_extent, box_extent, box_extent);
+    return new Box(-box_extent, box_extent);
 }
