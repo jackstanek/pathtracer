@@ -62,4 +62,6 @@ private:
     double norm;
 };
 
+Vector3D operator/ (double c, const Vector3D& v);
+
 #endif

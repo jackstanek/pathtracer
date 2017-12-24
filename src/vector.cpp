@@ -146,3 +146,10 @@ Vector3D Vector3D::operator/ (double c) const
                     GetY() / c,
                     GetZ() / c);
 }
+
+Vector3D operator/ (double c, const Vector3D& v)
+{
+    return Vector3D(c / v.GetX(),
+                    c / v.GetY(),
+                    c / v.GetZ());
+}

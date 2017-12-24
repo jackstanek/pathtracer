@@ -58,6 +58,4 @@ SceneObjectIntersection Sphere::Intersects(const Ray3D& ray, double max_dist) co
             return SceneObjectIntersection(this, false, ray);
         }
     }
-
-    //return this->bounding_box.Intersects(ray, max_dist);
 }
