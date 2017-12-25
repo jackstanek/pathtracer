@@ -35,7 +35,7 @@ Intersection BVHNode::Intersects(const Ray3D& ray,
 {
     /* Bail if the ray doesn't intersect the bounding box */
     auto box_intersect = bounding_box->Intersects(ray, max_dist);
-    if (box_intersect.intersected) {
+    if (!box_intersect.intersected) {
         return Intersection(nullptr, false, ray);
     } else {
         return box_intersect;
@@ -101,7 +101,7 @@ SceneObjectIntersection BVH::Intersects(const Ray3D &ray, double max_dist) const
     const BVHNode* curr_node;
     Intersection curr_intersect(nullptr, false, ray);
     ZBuffer zbuf;
-    while (to_check.empty()) {
+    while (!to_check.empty()) {
         curr_node = to_check.back();
         to_check.pop_back();
 

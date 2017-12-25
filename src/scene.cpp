@@ -97,41 +97,34 @@ Color Scene::ObjectColorAtPoint(const Ray3D& view,
 Color Scene::SceneColorAlongRay(const Ray3D& ray, uint8_t depth) const
 {
     if (depth > MAX_DEPTH) {
-        return Color(0, 0, 0);
+        return this->background;
     }
 
-    ZBuffer zb;
-    //Intersection closest;
+    SceneObjectIntersection closest = bvh->Intersects(ray, INFINITY);
 
-    for (auto obj : this->objects) {
-        SceneObjectIntersection info = obj->Intersects(ray);
-
-        if (info.intersected) {
-            zb.push(info);
-        }
+    if (!closest.intersected) {
+        /* No object intersected; ray exits scene. default
+           to black (ie no light reflected) */
+        return this->background;
     }
 
-    /* >= 1 object intersected */
-    if (zb.size() > 0) {
-        SceneObjectIntersection closest = zb.top();
-
-        auto scn_obj = static_cast<const SceneObject*>(closest.obj);
-        if (closest.inc == INC_INWARD) {
-            return this->ObjectColorAtPoint(ray,
-                                            scn_obj,
-                                            closest.point,
-                                            closest.norm.GetDir(),
-                                            depth);
-        } else if (closest.inc == INC_OUTWARD) {
-            return this->SceneColorAlongRay(ray.RefractThrough(closest.point,
-                                                               -closest.norm.GetDir(),
-                                                               scn_obj->GetMaterial().ior),
-                                            depth + 1);
-        }
+    /* Compute surface and refractive components. */
+    auto scn_obj = static_cast<const SceneObject*>(closest.obj);
+    if (closest.inc == INC_INWARD) {
+        return this->ObjectColorAtPoint(ray,
+                                        scn_obj,
+                                        closest.point,
+                                        closest.norm.GetDir(),
+                                        depth);
+    } else if (closest.inc == INC_OUTWARD) {
+        return this->SceneColorAlongRay(ray.RefractThrough(closest.point,
+                                                           -closest.norm.GetDir(),
+                                                           scn_obj->GetMaterial().ior),
+                                        depth + 1);
     }
 
-    /* No object intersected; ray exits scene. default
-       to black (ie no light reflected) */
+    /* This shouldn't execute, but to satisfy the compiler, return
+       the background color by default if nothing else worked right. */
     return this->background;
 }
 

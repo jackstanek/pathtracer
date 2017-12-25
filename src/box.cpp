@@ -57,6 +57,10 @@ Intersection Box::Intersects(const Ray3D& ray, double max_dist) const
         return Intersection(nullptr, false, ray);
     }
 
+    if (tmin > max_dist) {
+        return Intersection(nullptr, false, ray);
+    }
+
     Vector3D pt = ray.Point(tmin);
     return Intersection(nullptr,
                         true,
