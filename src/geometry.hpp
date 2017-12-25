@@ -4,6 +4,8 @@
 #include "vector.hpp"
 
 class Geometry {
+public:
+    Vector3D GetPos() const;
 protected:
     Geometry(const Vector3D& pos);
     Vector3D pos;
