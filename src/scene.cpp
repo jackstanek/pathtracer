@@ -10,6 +10,7 @@
 #include "intersection.hpp"
 #include "scene.hpp"
 #include "scene_object.hpp"
+#include "zbuffer.hpp"
 
 #define MAX_DEPTH (10)
 
@@ -215,4 +216,13 @@ uint32_t Scene::GetWidth() const
 uint32_t Scene::GetHeight() const
 {
     return this->height;
+}
+
+void Scene::InitBVH()
+{
+    if (bvh) {
+        delete bvh;
+    }
+
+    bvh = new BVH(objects);
 }

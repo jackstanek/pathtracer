@@ -102,6 +102,7 @@ int main(int argc, char* argv[])
     mat_pool.push_back(DEFAULT_MAT);
 
     /* Build the scene. */
+    std::printf("Building scene from description file %s...\n", scenefile->c_str());
     while ((sc = parser.GetNext())) {
         auto v = sc->values();
         switch (sc->key) {
@@ -185,6 +186,14 @@ int main(int argc, char* argv[])
 
         delete sc;
     }
+
+    std::printf("Scene building complete. "
+                "Added %ld vertices, %ld normals, "
+                "and %ld materials.\n",
+                vert_pool.size(), norm_pool.size(), mat_pool.size());
+
+    std::printf("Initializing BVH...\n");
+    scene.InitBVH();
 
     uint8_t* raw = new uint8_t[scene.GetHeight() * scene.GetWidth() * 4];
 

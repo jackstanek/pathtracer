@@ -164,3 +164,14 @@ bool Vector3D::operator< (const Vector3D& v) const
 
     return true;
 }
+
+bool Vector3D::operator<= (const Vector3D& v) const
+{
+    for (int axis = AXIS_X; axis < N_AXES; axis++) {
+        if (vals[axis] > v.vals[axis]) {
+            return false;
+        }
+    }
+
+    return true;
+}

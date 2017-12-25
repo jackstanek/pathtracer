@@ -57,6 +57,7 @@ public:
     Vector3D operator* (double c) const;
     Vector3D operator/ (double c) const;
     bool operator< (const Vector3D& v) const;
+    bool operator<= (const Vector3D& v) const;
 
 private:
     double vals[N_AXES];

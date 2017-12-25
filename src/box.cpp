@@ -24,9 +24,12 @@ Box::Box(const Box& left, const Box& right) :
                                       std::min(left_min.GetY(), right_min.GetY()),
                                       std::min(left_min.GetZ(), right_min.GetZ()));
     auto left_max = left.extents[BE_MAX_EXTENT], right_max = right.extents[BE_MAX_EXTENT];
-    extents[BE_MAX_EXTENT] = Vector3D(std::min(left_max.GetX(), right_max.GetX()),
-                                      std::min(left_max.GetY(), right_max.GetY()),
-                                      std::min(left_max.GetZ(), right_max.GetZ()));
+    extents[BE_MAX_EXTENT] = Vector3D(std::max(left_max.GetX(), right_max.GetX()),
+                                      std::max(left_max.GetY(), right_max.GetY()),
+                                      std::max(left_max.GetZ(), right_max.GetZ()));
+
+    assert(left <= *this);
+    assert(right <= *this);
 }
 
 Box::~Box()
@@ -61,7 +64,9 @@ Intersection Box::Intersects(const Ray3D& ray, double max_dist) const
                         pt);
 }
 
-bool Box::ValidBoundingBox() const
+bool Box::operator<= (const Box& box) const
 {
-    return !is_approx(extents[BE_MIN_EXTENT].To(extents[BE_MAX_EXTENT]).Norm(), 0);
+    return box.extents[BE_MIN_EXTENT] <= extents[BE_MIN_EXTENT]
+        && extents[BE_MAX_EXTENT] <= extents[BE_MAX_EXTENT];
+
 }

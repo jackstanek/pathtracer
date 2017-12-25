@@ -59,7 +59,6 @@ SceneObjectIntersection Sphere::Intersects(const Ray3D& ray, double max_dist) co
 
 const Box* Sphere::GetBoundingBox() const
 {
-    double box_extent = radius * M_SQRT2;
-    Vector3D extent(box_extent, box_extent, box_extent);
-    return new Box(-box_extent, box_extent);
+    Vector3D extent(radius, radius, radius);
+    return new Box(pos - extent, pos + extent);
 }

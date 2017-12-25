@@ -6,13 +6,10 @@
 #include <queue>
 #include <stdint.h>
 
+#include "bvh.hpp"
 #include "camera.hpp"
 #include "color.hpp"
 #include "scene_object.hpp"
-
-typedef std::priority_queue<SceneObjectIntersection,
-                            std::vector<SceneObjectIntersection>,
-                            std::greater<SceneObjectIntersection> > ZBuffer;
 
 typedef std::vector<Vector3D> VertexPool;
 
@@ -35,6 +32,8 @@ public:
 
     void Configure(SceneComponent* sc);
 
+    void InitBVH();
+
 private:
     /* Find what color lies at the end of ray */
     Color SceneColorAlongRay(const Ray3D& ray, uint8_t depth = 0) const;
@@ -52,6 +51,7 @@ private:
     /* Distance from point to the image plane */
     double dist;
 
+    const BVH* bvh;
     std::vector<const SceneObject*> objects;
     std::vector<const LightSource*> lights;
 };

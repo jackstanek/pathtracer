@@ -34,7 +34,8 @@ public:
     virtual Intersection Intersects(const Ray3D& ray,
                                     double max_dist = INFINITY) const;
 
-    bool ValidBoundingBox() const;
+    /* b is less than or equal to this iff b is engulfed by this. */
+    bool operator<= (const Box& b) const;
 
 private:
     Vector3D extents[N_EXTENTS];

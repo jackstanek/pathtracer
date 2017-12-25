@@ -1,6 +1,7 @@
 #ifndef BVH_HPP_
 #define BVH_HPP_
 
+#include <queue>
 #include <vector>
 
 #include "box.hpp"
@@ -25,8 +26,14 @@ public:
     BVHNode(const BVHNode* left, const BVHNode* right);
     ~BVHNode();
 
+    /* Check whether the given ray intersects this node. */
     Intersection Intersects(const Ray3D& ray,
                             double max_dist = INFINITY) const;
+
+    int GetNodeType() const;
+    const BVHNode* GetLeft() const;
+    const BVHNode* GetRight() const;
+    const SceneObject* GetObject() const;
 
 private:
     int type;
@@ -40,6 +47,7 @@ public:
     BVH(std::vector<const SceneObject*> objs);
     ~BVH();
 
+    /* Get a record of closest object intersected by the given ray */
     SceneObjectIntersection Intersects(const Ray3D& ray, double max_dist) const;
 
 private:
