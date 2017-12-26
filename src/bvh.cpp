@@ -3,12 +3,46 @@
 #include "scene_object.hpp"
 #include "zbuffer.hpp"
 
+/* The BVH here is very simple; it's just a binary tree of BVHNodes,
+ * each of which reference a scene object and its bounding box. A
+ * child node's bounding box is completely enclosed by its parent's
+ * bounding box.
+ */
+
+enum BVHNodeType {
+    BNT_BRANCH_NODE,
+    BNT_LEAF_NODE
+};
+
+class BVHNode {
+public:
+    BVHNode(const SceneObject* obj);
+    BVHNode(Box* bounding_box);
+    BVHNode(const BVHNode* left, const BVHNode* right);
+    ~BVHNode();
+
+    /* Check whether the given ray intersects this node. */
+    Intersection Intersects(const Ray3D& ray,
+                            double max_dist = INFINITY) const;
+
+    int type;
+    const SceneObject* obj;
+    const Box* bounding_box;
+    const BVHNode* left, * right;
+};
+
 BVHNode::BVHNode(const SceneObject* obj) :
     type(BNT_LEAF_NODE),
     obj(obj),
     bounding_box(obj->GetBoundingBox()),
     left(nullptr),
     right(nullptr)
+{
+}
+
+BVHNode::BVHNode(Box* bounding_box) :
+    type(BNT_BRANCH_NODE),
+    obj(nullptr)
 {
 }
 
@@ -33,42 +67,13 @@ BVHNode::~BVHNode()
 Intersection BVHNode::Intersects(const Ray3D& ray,
                                  double max_dist) const
 {
-    /* Bail if the ray doesn't intersect the bounding box */
-    auto box_intersect = bounding_box->Intersects(ray, max_dist);
-    if (!box_intersect.intersected) {
-        return Intersection(nullptr, false, ray);
-    } else {
-        return box_intersect;
-    }
+    /* Check if we intersect the bounding box */
+    return bounding_box->Intersects(ray, max_dist);
 }
 
-int BVHNode::GetNodeType() const
+BVH::BVH(std::vector<const SceneObject*> objs) :
+    root(ConstructTree(&objs, 0, objs.size()))
 {
-    return type;
-}
-
-const BVHNode* BVHNode::GetLeft() const
-{
-    return left;
-}
-
-const BVHNode* BVHNode::GetRight() const
-{
-    return right;
-}
-
-const SceneObject* BVHNode::GetObject() const
-{
-    return obj;
-}
-
-BVH::BVH(std::vector<const SceneObject*> objs)
-{
-    std::sort(objs.begin(), objs.end(),
-              [](const SceneObject* a, const SceneObject* b) {
-                  return a->GetPos() < b->GetPos();
-              });
-    root = ConstructTree(&objs, 0, objs.size());
 }
 
 BVH::~BVH()
@@ -79,16 +84,7 @@ BVH::~BVH()
 BVHNode* BVH::ConstructTree(std::vector<const SceneObject*>* objs,
                             int begin, int end)
 {
-    /* Sort by scene objects by their position projected onto the line
-     * x = y = z */
-    int len = end - begin;
-    if (len == 1) {
-        return new BVHNode(objs->at(begin));
-    } else {
-        int middle = len / 2 + begin;
-        return new BVHNode(ConstructTree(objs, begin, middle),
-                           ConstructTree(objs, middle, end));
-    }
+
 }
 
 SceneObjectIntersection BVH::Intersects(const Ray3D &ray, double max_dist) const
@@ -114,15 +110,15 @@ SceneObjectIntersection BVH::Intersects(const Ray3D &ray, double max_dist) const
 
         /* If there's an intersection, add sub-boxes to the checking
            stack if this is a "branch" box */
-        if (curr_node->GetNodeType() == BNT_BRANCH_NODE) {
-            to_check.push_back(curr_node->GetLeft());
-            to_check.push_back(curr_node->GetRight());
+        if (curr_node->type == BNT_BRANCH_NODE) {
+            to_check.push_back(curr_node->left);
+            to_check.push_back(curr_node->right);
         } else {
             /* If this is a leaf node (i.e. this box references an
                object), check intersection with that object and add to
                the z-buffer if successful */
             SceneObjectIntersection obj_intersect =
-                curr_node->GetObject()->Intersects(ray, max_dist);
+                curr_node->obj->Intersects(ray, max_dist);
             zbuf.push(obj_intersect);
         }
     }
