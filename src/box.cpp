@@ -68,6 +68,13 @@ Intersection Box::Intersects(const Ray3D& ray, double max_dist) const
                         pt);
 }
 
+int Box::LongestAxis() const
+{
+    return extents[BE_MIN_EXTENT]
+        .To(extents[BE_MAX_EXTENT])
+        .LongestAxis();
+}
+
 bool Box::operator<= (const Box& box) const
 {
     return box.extents[BE_MIN_EXTENT] <= extents[BE_MIN_EXTENT]

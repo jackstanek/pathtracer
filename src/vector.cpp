@@ -103,6 +103,12 @@ Vector3D Vector3D::RefractThrough(const Vector3D& n, double ior) const
         + this->Normalized() * ior;
 }
 
+int Vector3D::LongestAxis() const
+{
+    return vals[AXIS_X] > vals[AXIS_Y] ?
+        (vals[AXIS_Z] > vals[AXIS_X] ? AXIS_Z : AXIS_X) : AXIS_Y;
+}
+
 Vector3D Vector3D::operator+ (const Vector3D& v) const
 {
     /* Getters used within the class for readability, sorry */

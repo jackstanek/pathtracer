@@ -48,6 +48,8 @@ public:
     Vector3D ReflectAbout(const Vector3D& n) const;
     Vector3D RefractThrough(const Vector3D& n, double ior) const;
 
+    int LongestAxis() const;
+
     /* Vector */
 
     Vector3D operator+ (const Vector3D& v) const;

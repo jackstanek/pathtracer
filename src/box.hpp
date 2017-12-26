@@ -34,6 +34,8 @@ public:
     virtual Intersection Intersects(const Ray3D& ray,
                                     double max_dist = INFINITY) const;
 
+    int LongestAxis() const;
+
     /* b is less than or equal to this iff b is engulfed by this. */
     bool operator<= (const Box& b) const;
 
