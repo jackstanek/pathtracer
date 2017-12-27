@@ -13,7 +13,7 @@ class BVHNode;
 
 class BVH {
 public:
-    BVH(std::vector<const SceneObject*> objs);
+    BVH(std::vector<const SceneObject*>& objs);
     ~BVH();
 
     /* Get a record of closest object intersected by the given ray */
@@ -21,8 +21,6 @@ public:
 
 private:
     BVHNode* root;
-    BVHNode* ConstructTree(std::vector<const SceneObject*>* objs,
-                           int begin, int end);
 };
 
 #endif

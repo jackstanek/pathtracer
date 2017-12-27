@@ -109,6 +109,20 @@ int Vector3D::LongestAxis() const
         (vals[AXIS_Z] > vals[AXIS_X] ? AXIS_Z : AXIS_X) : AXIS_Y;
 }
 
+Vector3D Vector3D::MaxCombination(const Vector3D &u, const Vector3D &v)
+{
+    return Vector3D(std::max(u.vals[AXIS_X], v.vals[AXIS_X]),
+                    std::max(u.vals[AXIS_Y], v.vals[AXIS_Y]),
+                    std::max(u.vals[AXIS_Z], v.vals[AXIS_Z]));
+}
+
+Vector3D Vector3D::MinCombination(const Vector3D &u, const Vector3D &v)
+{
+    return Vector3D(std::min(u.vals[AXIS_X], v.vals[AXIS_X]),
+                    std::min(u.vals[AXIS_Y], v.vals[AXIS_Y]),
+                    std::min(u.vals[AXIS_Z], v.vals[AXIS_Z]));
+}
+
 Vector3D Vector3D::operator+ (const Vector3D& v) const
 {
     /* Getters used within the class for readability, sorry */
@@ -175,6 +189,17 @@ bool Vector3D::operator<= (const Vector3D& v) const
 {
     for (int axis = AXIS_X; axis < N_AXES; axis++) {
         if (vals[axis] > v.vals[axis]) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool Vector3D::operator== (const Vector3D& v) const
+{
+    for (int axis = AXIS_X; axis < N_AXES; axis++) {
+        if (vals[axis] != v.vals[axis]) {
             return false;
         }
     }

@@ -12,24 +12,16 @@ Box::Box(const Vector3D& min_extent,
     Geometry((min_extent + max_extent) / 2),
     extents {min_extent, max_extent}
 {
-    assert(min_extent < max_extent);
+    assert(min_extent <= max_extent);
 }
 
 Box::Box(const Box& left, const Box& right) :
     Geometry(((left.pos - left.extents[BE_MIN_EXTENT]) +
-              (right.pos + right.extents[BE_MAX_EXTENT])) / 2)
+              (right.pos + right.extents[BE_MAX_EXTENT])) / 2),
+    extents {Vector3D(), Vector3D()}
 {
-    auto left_min = left.extents[BE_MIN_EXTENT], right_min = right.extents[BE_MIN_EXTENT];
-    extents[BE_MIN_EXTENT] = Vector3D(std::min(left_min.GetX(), right_min.GetX()),
-                                      std::min(left_min.GetY(), right_min.GetY()),
-                                      std::min(left_min.GetZ(), right_min.GetZ()));
-    auto left_max = left.extents[BE_MAX_EXTENT], right_max = right.extents[BE_MAX_EXTENT];
-    extents[BE_MAX_EXTENT] = Vector3D(std::max(left_max.GetX(), right_max.GetX()),
-                                      std::max(left_max.GetY(), right_max.GetY()),
-                                      std::max(left_max.GetZ(), right_max.GetZ()));
-
-    assert(left <= *this);
-    assert(right <= *this);
+    Expand(left);
+    Expand(right);
 }
 
 Box::~Box()
@@ -68,6 +60,24 @@ Intersection Box::Intersects(const Ray3D& ray, double max_dist) const
                         pt);
 }
 
+void Box::Expand(const Box &box)
+{
+    /* If this is a zero-volume box, expand to engulf box. */
+    if (extents[BE_MIN_EXTENT] == extents[BE_MAX_EXTENT]) {
+        extents[BE_MIN_EXTENT] = box.extents[BE_MIN_EXTENT];
+        extents[BE_MAX_EXTENT] = box.extents[BE_MAX_EXTENT];
+    } else {
+        extents[BE_MIN_EXTENT] =
+            Vector3D::MinCombination(extents[BE_MIN_EXTENT],
+                                     box.extents[BE_MIN_EXTENT]);
+        extents[BE_MAX_EXTENT] =
+            Vector3D::MaxCombination(extents[BE_MAX_EXTENT],
+                                     box.extents[BE_MAX_EXTENT]);
+    }
+
+    assert(Engulfs(box));
+}
+
 int Box::LongestAxis() const
 {
     return extents[BE_MIN_EXTENT]
@@ -75,9 +85,8 @@ int Box::LongestAxis() const
         .LongestAxis();
 }
 
-bool Box::operator<= (const Box& box) const
+bool Box::Engulfs (const Box& box) const
 {
-    return box.extents[BE_MIN_EXTENT] <= extents[BE_MIN_EXTENT]
-        && extents[BE_MAX_EXTENT] <= extents[BE_MAX_EXTENT];
-
+    return extents[BE_MIN_EXTENT] <= box.extents[BE_MIN_EXTENT]
+        && box.extents[BE_MAX_EXTENT] <= extents[BE_MAX_EXTENT];
 }

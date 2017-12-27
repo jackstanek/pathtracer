@@ -48,6 +48,9 @@ public:
     Vector3D ReflectAbout(const Vector3D& n) const;
     Vector3D RefractThrough(const Vector3D& n, double ior) const;
 
+    static Vector3D MaxCombination(const Vector3D& u, const Vector3D& v);
+    static Vector3D MinCombination(const Vector3D& u, const Vector3D& v);
+
     int LongestAxis() const;
 
     /* Vector */
@@ -60,6 +63,7 @@ public:
     Vector3D operator/ (double c) const;
     bool operator< (const Vector3D& v) const;
     bool operator<= (const Vector3D& v) const;
+    bool operator== (const Vector3D& v) const;
 
 private:
     double vals[N_AXES];

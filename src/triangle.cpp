@@ -54,7 +54,7 @@ SceneObjectIntersection Triangle::Intersects(const Ray3D &ray, double max_dist) 
     return plane_intersect;
 }
 
-const Box* Triangle::GetBoundingBox() const
+Box Triangle::GetBoundingBox() const
 {
-    return nullptr;
+    return Box();
 }

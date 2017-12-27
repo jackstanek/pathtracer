@@ -25,7 +25,7 @@ public:
 
     virtual Material GetMaterial() const;
 
-    virtual const Box* GetBoundingBox() const = 0;
+    virtual Box GetBoundingBox() const = 0;
 
 protected:
     Material mat;

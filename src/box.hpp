@@ -23,8 +23,8 @@ class Box : public Geometry {
 public:
     /* Construct an axis-aligned bounding box with the given
        extents */
-    Box(const Vector3D& min_extent,
-        const Vector3D& max_extent);
+    Box(const Vector3D& min_extent = Vector3D(),
+        const Vector3D& max_extent = Vector3D());
 
     /* Construct a bounding box around two boxes */
     Box(const Box& left, const Box& right);
@@ -34,10 +34,12 @@ public:
     virtual Intersection Intersects(const Ray3D& ray,
                                     double max_dist = INFINITY) const;
 
+    void Expand(const Box& box);
     int LongestAxis() const;
 
-    /* b is less than or equal to this iff b is engulfed by this. */
-    bool operator<= (const Box& b) const;
+    /* b is engulfed by this box if it is contained completely within
+       it. */
+    bool Engulfs (const Box& b) const;
 
 private:
     Vector3D extents[N_EXTENTS];
