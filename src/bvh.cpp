@@ -51,40 +51,47 @@ void BVHNode::AddObject(const SceneObject* obj)
 
 void BVHNode::Subdivide()
 {
-    /* No need to subdivide if this node is small enough */
-    if (objs.size() <= MAX_OBJS) {
-        return;
-    }
+    /* Stack of child nodes to subdivide */
+    std::vector<BVHNode*> node_stack;
+    node_stack.push_back(this);
 
-    /* If we do have enough objects to divide, split along the mean
-       position along the longest axis. */
-    int longest_axis = bounding_box->LongestAxis();
+    while (!node_stack.empty()) {
+        auto curr_node = node_stack.back();
+        node_stack.pop_back();
 
-    double midpoint = 0;
-    for (auto obj : objs) {
-        midpoint += obj->GetPos().GetValue(longest_axis);
-    }
-    midpoint /= objs.size();
-
-    /* make left and right children */
-    left = new BVHNode;
-    right = new BVHNode;
-
-    /* Divvy up the objects */
-    while (!objs.empty()) {
-        auto obj = objs.back();
-        objs.pop_back();
-
-        if (obj->GetPos().GetValue(longest_axis) > midpoint) {
-            right->AddObject(obj);
-        } else {
-            left->AddObject(obj);
+        /* No need to subdivide if this node is small enough */
+        if (curr_node->objs.size() <= MAX_OBJS) {
+            continue;
         }
-    }
 
-    /* Do this somewhat recursively. */
-    left->Subdivide();
-    right->Subdivide();
+        /* If we do have enough objects to divide, split along the mean
+           position along the longest axis. */
+        int longest_axis = curr_node->bounding_box->LongestAxis();
+
+        double midpoint = 0;
+        for (auto obj : curr_node->objs) {
+            midpoint += obj->GetPos().GetValue(longest_axis);
+        }
+        midpoint /= curr_node->objs.size();
+
+       /* make left and right children */
+        curr_node->left = new BVHNode;
+        curr_node->right = new BVHNode;
+
+        while (!curr_node->objs.empty()) {
+            auto obj = curr_node->objs.back();
+            curr_node->objs.pop_back();
+
+            if (obj->GetPos().GetValue(longest_axis) > midpoint) {
+                curr_node->right->AddObject(obj);
+            } else {
+                curr_node->left->AddObject(obj);
+            }
+        }
+
+        node_stack.push_back(left);
+        node_stack.push_back(right);
+    }
 }
 
 Intersection BVHNode::Intersects(const Ray3D& ray,
