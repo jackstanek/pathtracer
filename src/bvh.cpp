@@ -127,7 +127,8 @@ SceneObjectIntersection BVH::Intersects(const Ray3D &ray, double max_dist) const
 
     const BVHNode* curr_node;
     Intersection curr_intersect(nullptr, false, ray);
-    ZBuffer zbuf;
+    SceneObjectIntersection closest_obj_intersect(nullptr, false, ray);
+    closest_obj_intersect.dist = INFINITY;
     while (!to_check.empty()) {
         curr_node = to_check.back();
         to_check.pop_back();
@@ -148,10 +149,10 @@ SceneObjectIntersection BVH::Intersects(const Ray3D &ray, double max_dist) const
            objects), check intersection with that object and add to
            the z-buffer if successful */
         for (auto obj : curr_node->objs) {
-            SceneObjectIntersection obj_intersect =
-                obj->Intersects(ray, max_dist);
-            if (obj_intersect.intersected) {
-                zbuf.push(obj_intersect);
+            auto obj_intersect = obj->Intersects(ray, max_dist);
+            if (obj_intersect.intersected &&
+                obj_intersect.dist < closest_obj_intersect.dist) {
+                closest_obj_intersect = obj_intersect;
             }
         }
 
@@ -159,9 +160,5 @@ SceneObjectIntersection BVH::Intersects(const Ray3D &ray, double max_dist) const
         to_check.push_back(curr_node->right);
     }
 
-    if (!zbuf.empty()) {
-        return zbuf.top();
-    } else {
-        return SceneObjectIntersection(nullptr, false, ray);
-    }
+    return closest_obj_intersect;
 }
