@@ -56,5 +56,12 @@ SceneObjectIntersection Triangle::Intersects(const Ray3D &ray, double max_dist) 
 
 Box Triangle::GetBoundingBox() const
 {
-    return Box();
+    Vector3D min_extent =
+        Vector3D::MinCombination(verts[2],
+                                 Vector3D::MinCombination(verts[0], verts[1]));
+    Vector3D max_extent =
+        Vector3D::MaxCombination(verts[2],
+                                 Vector3D::MaxCombination(verts[0], verts[1]));
+
+    return Box(min_extent, max_extent);
 }

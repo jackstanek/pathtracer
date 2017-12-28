@@ -19,7 +19,8 @@ Scene::Scene(uint32_t w,
     width(w),
     height(h),
     num_pix(w * h),
-    cam(45, width, height)
+    cam(45, width, height),
+    bvh(nullptr)
 {
 }
 

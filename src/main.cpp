@@ -171,13 +171,16 @@ int main(int argc, char* argv[])
             v1 = vert_pool[v[0].i_val];
             v2 = vert_pool[v[1].i_val];
             v3 = vert_pool[v[2].i_val];
+            Triangle* tri;
             if (sc->key == CK_TRIANGLE) {
-                scene.AddObject(new Triangle(v1, v2, v3, mat_pool.back()));
+                tri = new Triangle(v1, v2, v3, mat_pool.back());
             } else {
-                scene.AddObject(new NormalTriangle(v1, v2, v3,
-                                                   n1, n2, n3,
-                                                   mat_pool.back()));
+                tri = new NormalTriangle(v1, v2, v3,
+                                         n1, n2, n3,
+                                         mat_pool.back());
             }
+
+            scene.AddObject(tri);
             break;
         default:
             /* TODO: Implement this? */
