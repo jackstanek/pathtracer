@@ -39,6 +39,9 @@ public:
     Color operator+  (const Color& col) const;
     void operator+= (const Color& col);
 
+    /* Comparison */
+    bool operator> (const Color& col) const;
+
     static Color Average(const std::vector<Color>& colors);
 
 private:

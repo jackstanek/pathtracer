@@ -81,6 +81,17 @@ void Color::operator+= (const Color& col)
     }
 }
 
+bool Color::operator> (const Color& col) const
+{
+    for (int i = 0; i < CC_ALPHA; i++) {
+        if (channels[i] <= col.channels[i]) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 Color Color::Average(const std::vector<Color>& colors)
 {
     double totals[CC_N] = {0, 0, 0, 0};

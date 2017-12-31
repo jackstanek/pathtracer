@@ -84,10 +84,14 @@ Color Scene::ObjectColorAtPoint(const Ray3D& view,
     }
 
     /* Reflective component */
-    acc += this->SceneColorAlongRay(view.ReflectAbout(pt, normal), depth + 1) * mat.specular;
+    if (mat.specular > Color(0, 0, 0)) {
+        acc += this->SceneColorAlongRay(view.ReflectAbout(pt, normal), depth + 1) * mat.specular;
+    }
 
     /* Refractive component */
-    acc += this->SceneColorAlongRay(view.RefractThrough(pt, normal, 1 / mat.ior), depth + 1) * mat.transmissivity;
+    if (mat.transmissivity > Color(0, 0, 0)) {
+        acc += this->SceneColorAlongRay(view.RefractThrough(pt, normal, 1 / mat.ior), depth + 1) * mat.transmissivity;
+    }
 
     /* Ambient component */
     acc += mat.ambient * this->ambient;
